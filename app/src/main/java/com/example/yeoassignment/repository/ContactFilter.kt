@@ -18,7 +18,7 @@ class ContactFilter @Inject constructor() {
     }.filter { it.phoneNumbers.isNotEmpty() }
 
     private fun filterPhoneNumbers(phoneNumbers: List<String>) = phoneNumbers
-        .map { it.replace(WHITESPACE_REGEX, "") }
+        .map { it.replace(WHITESPACE_REGEX, "").replace(" ", "") }
         .filter {
             it.matches(Regex(PHONE_NUMBER_REGEX))
         }
