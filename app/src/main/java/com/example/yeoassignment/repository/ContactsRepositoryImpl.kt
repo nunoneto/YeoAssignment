@@ -6,16 +6,17 @@ import com.example.yeoassignment.database.ContactEntity
 import com.example.yeoassignment.database.PhoneNumberEntity
 import com.example.yeoassignment.database.YeoDatabase
 import com.example.yeoassignment.domain.ContactDomain
+import com.example.yeoassignment.utils.DateUtils
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
-import java.util.*
 import javax.inject.Inject
 
 class ContactsRepositoryImpl @Inject constructor(
     private val contactDataSource: IContactsDataSource,
     private val contactFilter: ContactFilter,
-    private val yeoDatabase: YeoDatabase
+    private val yeoDatabase: YeoDatabase,
+    private val dateUtils: DateUtils
 ) : IContactsRepository {
 
     override suspend fun importContactsIntoDb() {
@@ -24,7 +25,7 @@ class ContactsRepositoryImpl @Inject constructor(
         val currentContacts = yeoDatabase.contactDao().getAllContactsSync()
         val currentNumbers = yeoDatabase.phoneNumberDao().getAllSync()
 
-        val timestamp = Date().time.toString()
+        val timestamp = dateUtils.getNow().time.toString()
 
         val contactsToInsert =
             updatedContacts(currentContacts, importedContacts, currentNumbers, timestamp) +
